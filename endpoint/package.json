@@ -1,0 +1,16 @@
+{
+  "name": "m3u8-reencoder",
+  "version": "1.0.0",
+  "description": "M3U8 playlist proxy and re-encoder for Vercel",
+  "main": "api/proxy.js",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
