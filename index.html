@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HLSR - free m3u8 proxy</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #171a21;
+      --text: #e6e6e6;
+      --muted: #a8b0bf;
+      --accent: #4dabf7;
+      --accent-2: #2f7eea;
+      --border: #262a33;
+      --error: #ff6b6b;
+      --ok: #69db7c;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px; }
+    h1 { margin: 0 0 6px; font-size: 1.8rem; }
+    p.sub { color: var(--muted); margin: 0 0 18px; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    label { display: block; font-weight: 600; margin-bottom: 8px; }
+    .row { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-bottom: 14px; }
+    input[type="url"] {
+      width: 100%; padding: 12px 14px;
+      border-radius: 10px; border: 1px solid var(--border);
+      background: #0b0d12; color: var(--text);
+    }
+    input::placeholder { color: #718096; }
+    button {
+      padding: 12px 16px; border: none; border-radius: 10px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      color: white; font-weight: 700; cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    button:disabled {
+      background: #555; /* grey background */
+      color: #ccc;      /* lighter text */
+      cursor: not-allowed;
+    }
+    .out { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 14px; }
+    .msg { margin-top: 10px; font-size: 0.95rem; }
+    .msg.ok { color: var(--ok); }
+    .msg.err { color: var(--error); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>HLSR - free m3u8 proxy</h1>
+      <p class="sub">Enter a source URL and get a proxied link via hlsr.vercel.app.</p>
+    </header>
+
+    <div class="card">
+      <label for="in">Source URL</label>
+      <div class="row">
+        <input id="in" type="url" placeholder="https://example.com" />
+        <button id="gen" disabled>Generate</button>
+      </div>
+
+      <!-- Output section hidden initially -->
+      <div id="outputSection" class="hidden">
+        <div class="out">
+          <input id="out" type="url" readonly />
+          <button id="copy">Copy</button>
+        </div>
+        <div id="msg" class="msg"></div>
+        <p class="hint">We URL-encode your input so special characters are preserved.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const inEl = document.getElementById('in');
+    const outEl = document.getElementById('out');
+    const genBtn = document.getElementById('gen');
+    const copyBtn = document.getElementById('copy');
+    const msgEl = document.getElementById('msg');
+    const outputSection = document.getElementById('outputSection');
+
+    function isValidDomainURL(urlStr) {
+      try {
+        const url = new URL(urlStr);
+        const isHttp = url.protocol === 'http:' || url.protocol === 'https:';
+        // Check domain ends with a common TLD (basic validation)
+        const domain = url.hostname;
+        const hasValidTLD = /\.[a-z]{2,}$/i.test(domain);
+        return isHttp && hasValidTLD;
+      } catch {
+        return false;
+      }
+    }
+
+    function buildProxyURL(input) {
+      return `https://hlsr.vercel.app/api/proxy?url=${encodeURIComponent(input.trim())}`;
+    }
+
+    function generate() {
+      const raw = inEl.value.trim();
+      if (!isValidDomainURL(raw)) {
+        msgEl.textContent = 'Please enter a valid http(s) URL with a proper domain extension.';
+        msgEl.className = 'msg err';
+        outputSection.classList.add('hidden');
+        return;
+      }
+      const proxied = buildProxyURL(raw);
+      outEl.value = proxied;
+      msgEl.textContent = 'Proxy URL generated.';
+      msgEl.className = 'msg ok';
+      outputSection.classList.remove('hidden');
+    }
+
+    async function copyOut() {
+      try {
+        await navigator.clipboard.writeText(outEl.value);
+        msgEl.textContent = 'Copied to clipboard.';
+        msgEl.className = 'msg ok';
+      } catch {
+        outEl.select();
+        document.execCommand('copy');
+        msgEl.textContent = 'Copied (fallback).';
+        msgEl.className = 'msg ok';
+      }
+    }
+
+    // Live validation
+    inEl.addEventListener('input', () => {
+      const raw = inEl.value.trim();
+      if (isValidDomainURL(raw)) {
+        genBtn.disabled = false;
+        msgEl.textContent = '';
+        msgEl.className = 'msg hidden';
+      } else {
+        genBtn.disabled = true;
+        msgEl.textContent = 'Please enter a valid http(s) URL with a proper domain extension.';
+        msgEl.className = 'msg err';
+        outputSection.classList.add('hidden');
+      }
+    });
+
+    genBtn.addEventListener('click', generate);
+    copyBtn.addEventListener('click', copyOut);
+  </script>
+</body>
+</html>
