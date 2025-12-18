@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/fav/16.png" sizes="16x16">
+  <link rel="icon" href="/fav/32.png" sizes="32x32">
+  <link rel="icon" href="/fav/48.png" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="192x192" href="/fav/192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/fav/512.png">
+  <link rel="apple-touch-icon" href="fav/180.png" sizes="/180x180">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 - HLSR</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #171a21;
+      --text: #e6e6e6;
+      --muted: #a8b0bf;
+      --accent: #4dabf7;
+      --accent-2: #2f7eea;
+      --border: #262a33;
+      --error: #ff6b6b;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.8rem;
+    }
+    p.sub {
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 18px 22px;
+    }
+    .code {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--error);
+      margin-bottom: 10px;
+    }
+    a.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 18px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: none;
+      text-decoration: none;
+      font-weight: 600;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      color: white;
+      cursor: pointer;
+      transition: opacity 0.15s ease-out, transform 0.1s ease-out;
+    }
+    a.btn:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+    a.btn:active {
+      transform: translateY(0);
+      opacity: 0.85;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="code">404 - Not found</div>
+      <h1>Page not found</h1>
+      <p class="sub">
+        The page you’re looking for doesn’t exist, or the link is no longer valid.
+      </p>
+    </header>
+
+    <div class="card">
+      <p>
+        This domain hosts <strong>HLSR – free m3u8 proxy</strong>. You might be looking for the main tool instead.
+      </p>
+      <a href="/" class="btn">Back to HLSR home</a>
+      <p class="hint">
+        If you reached this via a saved link, check the URL or regenerate a fresh proxied link.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
